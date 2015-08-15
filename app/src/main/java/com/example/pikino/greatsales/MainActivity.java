@@ -3,6 +3,7 @@ package com.example.pikino.greatsales;
 import android.app.ListActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +16,7 @@ public class MainActivity extends ListActivity {
 
 
     private ProductDAO datasource;
+    private ParameterDAO parameterSource;
 
 
 
@@ -22,17 +24,20 @@ public class MainActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        datasource  = new ProductDAO(this);
+        datasource      = new ProductDAO(this);
+        parameterSource = new ParameterDAO(this);
+
 
     }
 
 
     private void loadAllProducts(){
-
+        datasource.open();
         List<Product> productList           = new ArrayList<Product>();
         productList                         = this.datasource.getAllProducts();
         ArrayAdapter<Product> arrayAdapter  = new ArrayAdapter<Product>(this, android.R.layout.simple_list_item_1, productList);
         setListAdapter(arrayAdapter);
+        datasource.close();
 
 
     }
@@ -60,8 +65,19 @@ public class MainActivity extends ListActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void loadParameterSource(){
+
+        this.parameterSource.open();
+        Parameter parameter = this.parameterSource.loadParameterByName("source");
+        Log.d("parametros", "=============================================================");
+        Log.d("parametros",parameter.getParametervalue());
+        this.parameterSource.close();
+    }
+
     public void getProducts(View view) {
-        this.loadAllProducts();
+        Log.d("parametros", "LLegamos a parametros =======================================");
+        this.loadParameterSource();
+        //this.loadAllProducts();
     }
 
 

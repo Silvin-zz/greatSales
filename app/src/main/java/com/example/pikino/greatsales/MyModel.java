@@ -10,7 +10,7 @@ import android.util.Log;
  */
 public class MyModel extends SQLiteOpenHelper{
 
-    private static final String DATABASE_NAME   = "sales.db";
+    private static final String DATABASE_NAME   = "greatesales.db";
     private static final int DATABASE_VERSION   = 1;
 
 
@@ -26,17 +26,22 @@ public class MyModel extends SQLiteOpenHelper{
         Log.d("Database", "==============================================================");
         //Creamos la base de datos
         String databaseString = "";
-        databaseString = "CREATE TABLE PRODUCT  (id INTEGER primary key autoincrement, title TEXT,     description TEXT,  cost REAL                 ); " +
-                         "CREATE TABLE SALE     (id INTEGER primary key autoincrement, subtotal REAL,  tax REAL,          total REAL                ); " +
-                         "CREATE TABLE DETAIL   (id INTEGER primary key autoincrement, saleid INTEGER, productid INTEGER, count INTEGER, cost REAL  )";
+        databaseString = "CREATE TABLE PRODUCT      (id INTEGER primary key autoincrement, title TEXT,     description TEXT,  cost REAL                     ); " +
+                         "CREATE TABLE SALE         (id INTEGER primary key autoincrement, subtotal REAL,  tax REAL,          total REAL                    ); " +
+                         "CREATE TABLE PARAMETER    (id INTEGER primary key autoincrement, name TEXT,      parametervalue TEXT                              ); " +
+                         "CREATE TABLE DETAIL       (id INTEGER primary key autoincrement, saleid INTEGER, productid INTEGER, count INTEGER, cost REAL      ); " +
+                         "INSERT INTO PARAMETER(name,parametervalue)      VALUES('source', 'http://ec2-54-187-142-119.us-west-2.compute.amazonaws.com:8080' );";
         db.execSQL(databaseString);
 
+
+        Log.d("parametros", databaseString);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        Log.d("Database", "111111111111111111111111111111111111111111111111");
         String databaseString = "";
-        databaseString        ="DROP IF EXIST TABLE PRODUCT; DROP IF EXIST TABLE SALE; DROP IF EXIST TABLE DETAIL";
+        databaseString        ="DROP TABLE IF EXISTS PRODUCT; DROP TABLE IF EXISTS SALE; DROP TABLE IF EXISTS DETAIL; DROP TABLE IF EXISTS PARAMETER;";
         db.execSQL(databaseString);
         onCreate(db);
     }
