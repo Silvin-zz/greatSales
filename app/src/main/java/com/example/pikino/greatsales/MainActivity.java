@@ -1,6 +1,8 @@
 package com.example.pikino.greatsales;
 
+import android.app.Activity;
 import android.app.ListActivity;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,7 +14,7 @@ import android.widget.ArrayAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends ListActivity {
+public class MainActivity extends Activity {
 
 
     private ProductDAO datasource;
@@ -36,7 +38,7 @@ public class MainActivity extends ListActivity {
         List<Product> productList           = new ArrayList<Product>();
         productList                         = this.datasource.getAllProducts();
         ArrayAdapter<Product> arrayAdapter  = new ArrayAdapter<Product>(this, android.R.layout.simple_list_item_1, productList);
-        setListAdapter(arrayAdapter);
+        //setListAdapter(arrayAdapter);
         datasource.close();
 
 
@@ -68,7 +70,7 @@ public class MainActivity extends ListActivity {
     private void loadParameterSource(){
 
         this.parameterSource.open();
-        Parameter parameter = this.parameterSource.loadParameterByName("source");
+        Parameter parameter = this.parameterSource.loadParameterByName("rest_source");
         Log.d("parametros", "=============================================================");
         Log.d("parametros",parameter.getParametervalue());
         this.parameterSource.close();
@@ -81,4 +83,16 @@ public class MainActivity extends ListActivity {
     }
 
 
+    public void gotoConfiguration(View view) {
+        Intent intent = new Intent(this, ConfigActivity.class);
+        startActivity(intent);
+
+    }
+
+    public void gotoLoadProducts(View view) {
+
+        Intent intent = new Intent(this, LoadProductActivity.class);
+        startActivity(intent);
+
+    }
 }

@@ -16,6 +16,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ConfigActivity"
+            android:label="@string/title_activity_config" >
+        </activity>
+        <activity
+            android:name=".LoadProductActivity"
+            android:label="@string/title_activity_load_product" >
+        </activity>
     </application>
 
 </manifest>
