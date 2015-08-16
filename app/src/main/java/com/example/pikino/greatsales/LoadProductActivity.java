@@ -7,12 +7,30 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class LoadProductActivity extends ActionBarActivity {
+
+    private String urlProducts;
+    private ParameterDAO parameterSource;
+    private List<Product> lstProducts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_load_product);
+        this.loadUrlProducts();
+    }
+
+
+    private void loadUrlProducts(){
+
+        this.parameterSource.open();
+        Parameter parameter   = this.parameterSource.loadParameterByName("rest_source");
+        this.parameterSource.close();
+        this.urlProducts = parameter.getParametervalue().toString() + "/api/entity/product";
+
     }
 
     @Override
@@ -48,4 +66,14 @@ public class LoadProductActivity extends ActionBarActivity {
 
 
     }
+
+    private Runnable runnableProducts = new Runnable() {
+        @Override
+        public void run() {
+            lstProducts = new ArrayList<>();
+            
+
+        }
+    };
+
 }
