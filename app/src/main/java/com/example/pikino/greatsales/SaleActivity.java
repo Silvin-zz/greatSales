@@ -20,7 +20,7 @@ public class SaleActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sale);
-        this.productDAO         = new ProductDAO(this);
+        this.productDAO         = new ProductDAO(this); 
         this.loadProducts();
     }
 
