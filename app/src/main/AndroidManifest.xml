@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.pikino.greatsales" >
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -23,6 +26,10 @@
         <activity
             android:name=".LoadProductActivity"
             android:label="@string/title_activity_load_product" >
+        </activity>
+        <activity
+            android:name=".SaleActivity"
+            android:label="@string/title_activity_sale" >
         </activity>
     </application>
 

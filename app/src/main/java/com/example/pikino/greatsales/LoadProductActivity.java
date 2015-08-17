@@ -3,24 +3,57 @@ package com.example.pikino.greatsales;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
+
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import java.util.ArrayList;
+import java.util.List;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
+
+
+
 public class LoadProductActivity extends ActionBarActivity {
 
-    private String urlProducts;
-    private ParameterDAO parameterSource;
-    private List<Product> lstProducts;
+    private     String urlProducts;
+    private     ParameterDAO parameterSource;
+    private     List<Product> lstProducts;
+    protected   TextView      txtInfo;
+    protected   ProductDAO productDAO;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_load_product);
+        this.parameterSource    = new ParameterDAO(this);
+        this.productDAO         = new ProductDAO(this);
+        this.txtInfo            = (TextView) this.findViewById(R.id.txtInfo);
         this.loadUrlProducts();
+        txtInfo.setText("Buscando productos en :" + this.urlProducts);
+        Thread thread           = new Thread(this.runnableProducts);
+        txtInfo.setText("Procesando productos .... ");
+
+        try {
+
+            thread.join();
+            thread.start();
+            txtInfo.setText("¡EnHorabuena! se han procesado todos los productos, ahora ya puedes venderlos");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -30,6 +63,7 @@ public class LoadProductActivity extends ActionBarActivity {
         Parameter parameter   = this.parameterSource.loadParameterByName("rest_source");
         this.parameterSource.close();
         this.urlProducts = parameter.getParametervalue().toString() + "/api/entity/product";
+
 
     }
 
@@ -70,8 +104,31 @@ public class LoadProductActivity extends ActionBarActivity {
     private Runnable runnableProducts = new Runnable() {
         @Override
         public void run() {
+
             lstProducts = new ArrayList<>();
-            
+            JSONParser  jParser = new JSONParser();
+            JSONArray   json    = jParser.getJSONFromUrl(urlProducts);
+            productDAO.open();
+
+            //Clean the table product
+            productDAO.clearProduct();
+            for( int a = 0; a < json.length(); a++){
+
+                try {
+                    Log.d("JSON", json.getJSONObject(a).getString(MyModel.PRODUCT_TITLE));
+                    productDAO.createProduct(
+                            json.getJSONObject(a).getString(MyModel.PRODUCT_TITLE),
+                            json.getJSONObject(a).getString(MyModel.PRODUCT_DESCRIPTION),
+                            (float) json.getJSONObject(a).getDouble(MyModel.PRODUCT_COST)
+                            );
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            productDAO.close();
+
 
         }
     };

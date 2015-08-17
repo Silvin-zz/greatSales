@@ -6,4 +6,5 @@
     <string name="title_activity_config">ConfigActivity</string>
     <string name="title_activity_load_products">LoadProductsActivity</string>
     <string name="title_activity_load_product">LoadProductActivity</string>
+    <string name="title_activity_sale">SaleActivity</string>
 </resources>

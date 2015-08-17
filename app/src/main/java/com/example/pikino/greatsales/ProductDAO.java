@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,7 @@ public class ProductDAO {
 
     private SQLiteDatabase  db;
     private MyModel         dbHelper;
-    private String[]        allColumns = {"id", "title", "description", "cost"};
+    private String[]        allColumns = {MyModel.PRODUCT_ID, MyModel.PRODUCT_TITLE, MyModel.PRODUCT_DESCRIPTION, MyModel.PRODUCT_COST};
 
 
     public ProductDAO(Context context) {
@@ -30,12 +31,15 @@ public class ProductDAO {
         dbHelper.close();
     }
 
-    public Product createProduct(String title, String description, Float cost){
+    public Product createProduct(String title, String description, float cost){
         ContentValues contentValues     = new ContentValues();
 
-        contentValues.put("title"       , title);
-        contentValues.put("description" , description);
-        contentValues.put("cost", cost);
+
+        contentValues.put(MyModel.PRODUCT_TITLE,        title);
+        contentValues.put(MyModel.PRODUCT_DESCRIPTION,  description);
+        contentValues.put(MyModel.PRODUCT_COST,         cost);
+
+        Log.d("Productos", "Agregando el producto :" + title);
 
         long id         = db.insert("PRODUCT", null, contentValues);
         Cursor cursor   = db.query("PRODUCT", allColumns, "id=" + id, null, null, null, null);
@@ -43,6 +47,10 @@ public class ProductDAO {
         Product product = cursorToProduct(cursor);
         cursor.close();
         return product;
+    }
+
+    public void clearProduct(){
+        db.execSQL("DELETE  FROM " + MyModel.PRODUCT_TABLE);
     }
 
 

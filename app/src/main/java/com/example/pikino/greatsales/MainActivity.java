@@ -95,4 +95,10 @@ public class MainActivity extends Activity {
         startActivity(intent);
 
     }
+
+    public void gotoSales(View view) {
+
+        Intent intent = new Intent(this, SaleActivity.class);
+        startActivity(intent);
+    }
 }
